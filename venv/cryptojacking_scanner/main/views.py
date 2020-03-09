@@ -39,11 +39,25 @@ def scanning(request):
 
 			website3=bs4.BeautifulSoup(website2.text,"html.parser")
 
+			#print(website3)
+
 			minerRegex = re.compile(r'coinhive.min.js|wpupdates.github.io/ping|cryptonight.asm.js|coin-hive.com|jsecoin.com|cryptoloot.pro|webassembly.stream|ppoi.org|xmrstudio|webmine.pro|miner.start|allfontshere.press|upgraderservices.cf|vuuwd.com')
 
-			final=website3.find("script",text=minerRegex)
+			# print(minerRegex)
 
-			return HttpResponse(final)
+			final=website3.find("script",text=minerRegex)
+			if final==None:
+				return HttpResponse(final)
+
+			else:
+					return HttpResponse("cryptomining found")
+
+
+			
+
+			#print(final)
+
+			# return HttpResponse("cryptomining detected:"+final)
 
 		except:
 			return HttpResponse("Could not connect.Please check your internet connection or you have entered a wrong site name")
@@ -59,9 +73,14 @@ def multiscanning(request):
 		multiscan1=request.FILES['myfile']
 	
 		multiscan=multiscan1.read().splitlines()
+		# for uri in multiscan:
+		# 	uri=uri.decode('utf-8')
+		# 	print(type(uri))
+		# 	print(uri)
+		# return render(request,"line.html",{"multiscan":multiscan})
 		for line in multiscan:
 			line=line.decode('utf-8')
-			# return HttpResponse(('scanning:'+ line))
+			return HttpResponse(('scanning:'+ line))
 			try:
 				multiscan2=requests.get('http://' + line.strip(), verify==False,timeout==5)
 
